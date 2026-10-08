@@ -1,0 +1,13 @@
+# Changes here will be overwritten by Copier. Do not edit manually.
+_commit: v0.3.5
+_src_path: gh:WoosterTech/simple-modern-uv
+copyright_year: '2026'
+license: MIT
+package_author_email: karl@woostertech.com
+package_author_name: Karl Wooster
+package_cli_name: arr
+package_description: changeme
+package_env_prefix: ARR_TOOLS
+package_github_org: WoosterTech
+package_module: arr_tools
+package_name: arr-tools
