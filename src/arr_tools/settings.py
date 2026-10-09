@@ -8,8 +8,18 @@ Additional settings can be added as needed.
 """
 
 import logging
+from functools import cache
+from pathlib import PurePosixPath
 
+from pydantic import AnyUrl, BaseModel, Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class RadarrSettings(BaseModel):
+    host: AnyUrl
+    api_key: SecretStr
+    internal_root: PurePosixPath
+    local_root: PurePosixPath
 
 
 class Settings(BaseSettings):
@@ -19,7 +29,11 @@ class Settings(BaseSettings):
         case_sensitive=False,
         env_prefix="ARR_TOOLS_",
         extra="ignore",
+        env_nested_delimiter="__",
+        nested_model_default_partial_update=True,
     )
+
+    radarr: RadarrSettings = Field(default_factory=RadarrSettings)  # pyright: ignore[reportArgumentType, reportUnknownVariableType]
 
     debug: bool = False
     log_level: str | None = None
@@ -31,4 +45,6 @@ class Settings(BaseSettings):
         return logging.INFO
 
 
-settings = Settings()
+@cache
+def get_settings() -> Settings:
+    return Settings()

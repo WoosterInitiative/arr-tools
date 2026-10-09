@@ -6,5 +6,10 @@
     "conventionalCommits.scopes": [
         "copier",
         "vscode"
-    ]
+    ],
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }

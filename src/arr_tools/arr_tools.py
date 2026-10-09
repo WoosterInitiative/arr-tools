@@ -5,11 +5,13 @@ import typer
 from .core import GlobalCLIOptions, ProjectContext
 from .devtools import app as devtools_cli
 from .logging_config import get_console, verbosity_option
+from .radarr.cli import app as radarr_cli
 
 cli = typer.Typer(help="Main CLI for arr-tools.")
 console = get_console()
 
 # !devtools should be the last subcommand added to ensure it appears at the end of the help output.
+cli.add_typer(radarr_cli, name="radarr", help="Radarr related commands.")
 cli.add_typer(devtools_cli, name="devtools", help="Developer tools for arr-tools.")
 
 

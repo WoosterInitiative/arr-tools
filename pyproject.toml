@@ -1,16 +1,17 @@
-# ---- Project Info and Dependencies ----
+[build-system]
+build-backend = "hatchling.build"
+requires = [ "hatchling", "uv-dynamic-versioning" ]
 
+# ---- Project Info and Dependencies ----
 [project]
 name = "arr-tools"
 description = "changeme"
 readme = "README.md"
-requires-python = ">=3.12,<4.0"
-
-license-files = ["LICENSE"]
-
+license-files = [ "LICENSE" ]
 authors = [
   { name = "Karl Wooster", email = "karl@woostertech.com" },
 ]
+requires-python = ">=3.14,<4.0"
 # https://pypi.org/classifiers/
 # Adjust as needed:
 classifiers = [
@@ -22,54 +23,56 @@ classifiers = [
   # Include this to avoid accidentally publishing to PyPI:
   "Private :: Do Not Upload",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.12",
-  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
   "Typing :: Typed",
 ]
+dynamic = [ "version" ]
 # ---- Main dependencies ----
 dependencies = [
-  "pydantic-settings>=2.11.0",
-  "rich>=14.0.0",
+  "attrmagic>=0.2.3",
+  "pydantic>=2.14",
+  "pydantic-settings>=2.11",
+  "requests>=2.34.2",
+  "rich>=14",
   "typer>=0.24.1",
 ]
-dynamic = ["version"]
-
-[project.urls]
-Repository = "https://github.com/WoosterTech/arr-tools"
-# Homepage = "https://..."
-# Documentation = "https://..."
-
-[project.scripts]
+# urls.Documentation = "https://..."
+# urls.Homepage = "https://..."
+urls.Repository = "https://github.com/WoosterTech/arr-tools"
 # Add script entry points here:
-arr-tools = "arr_tools.arr_tools:cli"
+scripts.arr = "arr_tools.arr_tools:cli"
 
 # ---- Build system ----
-
 # Dynamic versioning from:
 # https://github.com/ninoseki/uv-dynamic-versioning/
-
 [dependency-groups]
 dev = [
-  "basedpyright>=1.31.0",
+  "basedpyright>=1.31",
   "codespell>=2.4.1",
-  "deptry>=0.23.0",
-  "ipython>=9.8.0",
+  "deptry>=0.23",
+  "ipython>=9.8",
   "jinja2>=3.1.6",
   "prek>=0.4.3",
   "pydantic>=2.11.9",
+  "pyproject-fmt>=2.30.1",
   "pytest>=8.3.5",
-  "pytest-sugar>=1.0.0",
-  "rich>=14.0.0",
+  "pytest-sugar>=1",
+  "rich>=14",
   "ruff>=0.11.9",
 ]
 docs = [
   "zensical>=0.0.43",
 ]
 
-[build-system]
-requires = ["hatchling", "uv-dynamic-versioning"]
-build-backend = "hatchling.build"
+[tool.hatch]
+version.source = "uv-dynamic-versioning"
+# Note JSON schemas don't seem to be right for tool.hatch.version.source so
+# this may cause false warnings in IDEs.
+# https://github.com/ninoseki/uv-dynamic-versioning/issues/21
+# The source location for the package.
+build.targets.wheel.packages = [ "src/arr_tools" ]
 
 [tool.codespell]
 # Add here as needed:
@@ -78,26 +81,16 @@ build-backend = "hatchling.build"
 
 # ---- Dev dependencies ----
 [tool.deptry]
-extend_exclude = ["src/arr_tools/devtools\\.py"]
-
-[tool.hatch.version]
-source = "uv-dynamic-versioning"
-# Note JSON schemas don't seem to be right for tool.hatch.version.source so
-# this may cause false warnings in IDEs.
-# https://github.com/ninoseki/uv-dynamic-versioning/issues/21
-
-[tool.hatch.build.targets.wheel]
-# The source location for the package.
-packages = ["src/arr_tools"]
+extend_exclude = [ "src/arr_tools/devtools\\.py" ]
+known_first_party = [ "arr_tools" ]
 
 # ---- Settings ----
-
 [tool.pytest]
 filterwarnings = []
 norecursedirs = []
-python_classes = ["Test*"]
-python_files = ["*.py"]
-python_functions = ["test_*"]
+python_classes = [ "Test*" ]
+python_files = [ "*.py" ]
+python_functions = [ "test_*" ]
 testpaths = [
   "src",
   "tests",

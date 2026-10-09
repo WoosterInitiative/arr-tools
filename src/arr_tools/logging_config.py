@@ -8,12 +8,13 @@ from typing import TYPE_CHECKING, cast, final
 
 from typer import Option as TyperOption
 
-from .settings import settings
+from .settings import get_settings
 
 if TYPE_CHECKING:
     from rich.console import Console
     from rich.theme import Theme
 
+settings = get_settings()
 # ---- Custom TRACE level ----------------------------------------------------
 TRACE_LEVEL = "TRACE", 5
 TRACE_LEVEL_NAME, TRACE_LEVEL_NUM = TRACE_LEVEL
@@ -22,7 +23,7 @@ logging.addLevelName(TRACE_LEVEL_NUM, TRACE_LEVEL_NAME)
 type _SysExcInfoType = (
     tuple[type[BaseException], BaseException, TracebackType | None] | tuple[None, None, None]
 )
-type _ExcInfoType = None | bool | _SysExcInfoType | BaseException
+type _ExcInfoType = bool | _SysExcInfoType | BaseException | None
 type _ArgsType = tuple[object, ...] | Mapping[str, object]
 
 
@@ -66,8 +67,8 @@ if TYPE_CHECKING:
 
 @dataclass
 class GlobalConsole:
-    console: "Console | None" = None
-    theme: "Theme | None" = None
+    console: Console | None = None
+    theme: Theme | None = None
     _configured: bool = field(default=False, init=False, repr=False)
     rich: bool = field(default=False, init=False)
 
@@ -81,7 +82,7 @@ class GlobalConsole:
 
         self.rich = True
 
-    def configure(self, theme: "Theme | None" = None) -> None:
+    def configure(self, theme: Theme | None = None) -> None:
         if self._configured:
             return
 
@@ -163,7 +164,7 @@ def setup_logging(rich_tracebacks: bool = True) -> None:
     _configured = True
 
 
-def get_logger(name: str) -> "MyLogger":
+def get_logger(name: str) -> MyLogger:
     """
     Get a logger with the specified name.
 
@@ -179,7 +180,7 @@ def get_logger(name: str) -> "MyLogger":
     return cast("MyLogger", logging.getLogger(name))
 
 
-def get_console() -> "Console":
+def get_console() -> Console:
     """
     Get the Rich console instance used by the logging system.
 

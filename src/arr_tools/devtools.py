@@ -5,7 +5,7 @@ from typing import Annotated, ClassVar
 import typer
 from jinja2 import Environment, PackageLoader, Template
 
-from .core import ProjectContext
+from .core import ProjectContext  # noqa: TC001
 from .logging_config import get_console, get_logger
 
 logger = get_logger(__name__)
@@ -192,7 +192,7 @@ def shell(
         sh = TerminalInteractiveShell.instance(config=c)
         sh.user_ns.update(ns)  # pyright: ignore[reportUnknownMemberType]
         sh.mainloop()
-    except Exception:  # noqa: BLE001
+    except Exception:
         logger.warning("IPython not available, falling back to standard shell.", exc_info=True)
         import code
 
